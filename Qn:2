@@ -1,0 +1,59 @@
+#include<pthread.h>
+#include<stdio.h>
+int n,a[20];
+int i;
+void *avg();
+void *min();
+void *max();
+int main()
+{
+printf("Number of subjects to be entered:");
+scanf("%d",&n);
+printf("Enter marks:");
+for(i=0;i<n;i++)
+{
+scanf("%d",&a[i]);
+}
+pthread_t t1,t2,t3;
+pthread_create(&t1,NULL,avg,NULL);
+pthread_create(&t2,NULL,min,NULL);
+pthread_create(&t3,NULL,max,NULL);
+pthread_join(t1,NULL);
+pthread_join(t2,NULL);
+pthread_join(t3,NULL);
+printf("\n The Program report\n");
+}
+void *avg()
+{
+int average=0;
+for(i=0;i<n;i++)
+{
+average=average+a[i];
+}
+average=average/n;
+printf("Average marks:%d\n",average);
+}
+void *min()
+{
+int minimum=a[0];
+for(i=1;i<n;i++)
+{
+if(a[i]<minimum)
+{
+minimum=a[i];
+}
+}
+printf("Minimum marks:%d\n",minimum);
+}
+void *max()
+{
+int maximum=a[0];
+for(i=1;i<n;i++)
+{
+if(a[i]>maximum)
+{
+maximum=a[i];
+}
+}
+printf("Maximum marks:%d\n",maximum);
+}
