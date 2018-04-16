@@ -1,0 +1,74 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<sys/types.h>
+
+
+int main()
+	{
+		
+	
+		int id[2],n;int id1[2];
+		pid_t p;
+		pipe(id);
+		char buffer[100];
+                pipe(id1);
+		p=fork();
+			if(p>0)  
+				{
+                                   close(id[0]);
+
+				   printf("parent process\n");
+		                   write(1,"enter message you want to send to\n ",34);
+				   n=read(0,buffer,sizeof(buffer));
+                                  
+				   write(id[1],buffer,n);
+
+				wait(NULL);
+					
+				close(id1[1]);
+				n=read(id1[0],buffer,n);
+				printf(" parent process\nreceived message from child process is  %s  ",buffer);
+					 
+					
+
+      				}
+
+     			 else 
+
+      					{
+
+                  			close(id[1]);
+            
+				  	n=read(id[0],buffer,100);
+					printf("child process\nrecceived message is %s\n",buffer);
+			int i;
+					for( i=0;buffer[i]!='\0';i++)
+						 { 
+
+
+						if(buffer[i]>='A'&&buffer[i]<='Z')
+							{
+
+								buffer[i]+=32;            
+
+  							}
+						 else if (buffer[i]>='a'&&buffer[i]<='z') 
+							{
+
+								buffer[i]-=32;           
+
+							}
+
+						}
+ 					close(id1[0]);
+	
+					printf("sending modified message again back to  parent process\n");
+
+    					write(id1[1],buffer,n);
+            
+
+  				   }
+
+}
